@@ -13,7 +13,7 @@ struct FetchController {
         case badURL, badResponse, badData
     }
 
-    private let baseURL = URL(string: "https//pokeapi.co/api/v2/pokemon/")!
+    private let baseURL = URL(string: "https://pokeapi.co/api/v2/pokemon/")!
 
     func fetchAllPokemons() async throws -> [PokemonModel] {
         var pokemons: [PokemonModel] = []
@@ -69,7 +69,7 @@ struct FetchController {
         }
 
         let pokemon = try JSONDecoder().decode(PokemonModel.self, from: data)
-
+        print("Fetched: \(pokemon)")
         return pokemon
     }
 }

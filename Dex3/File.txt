@@ -1,0 +1,1 @@
+Predictive Code Completion is fanstaic feature in Xcode 16. Which autocompilete the variables, methods and enclose partathenes.

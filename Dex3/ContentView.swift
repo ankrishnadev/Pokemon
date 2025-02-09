@@ -19,26 +19,14 @@ struct ContentView: View {
     )
     private var pokedex: FetchedResults<Pokemon>
 
-    var body: some View {
-        NavigationStack {
-            List(pokedex) { pokemon in
-                NavigationLink(value: pokemon) {
-                    AsyncImage(url: pokemon.sprite) {
-                        image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: 100, height: 100)
+    @StateObject var viewModel = PokemonViewModel(controller: FetchController())
 
-                    Text(pokemon.name!.capitalized)
-                }
-                .navigationTitle("Pokédex")
-                .navigationDestination(
-                    for: Pokemon.self,
-                    destination: { pokemon in
+    var body: some View {
+        switch viewModel.state {
+        case .success:
+            NavigationStack {
+                List(pokedex) { pokemon in
+                    NavigationLink(value: pokemon) {
                         AsyncImage(url: pokemon.sprite) {
                             image in
                             image
@@ -48,20 +36,33 @@ struct ContentView: View {
                             ProgressView()
                         }
                         .frame(width: 100, height: 100)
+
+                        Text(pokemon.name!.capitalized)
                     }
-                )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
+                    .navigationTitle("Pokédex")
+                    .navigationDestination(
+                        for: Pokemon.self,
+                        destination: { pokemon in
+                            PokemonDetailView().environmentObject(pokemon)
+                        }
+                    )
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            EditButton()
+                        }
                     }
                 }
             }
+        default:
+            ProgressView()
         }
     }
 }
 
-#Preview {
-    ContentView().environment(
-        \.managedObjectContext,
-        PersistenceController.preview.container.viewContext)
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView().environment(
+            \.managedObjectContext,
+            PersistenceController.preview.container.viewContext)
+    }
 }
