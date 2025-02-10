@@ -21,7 +21,7 @@ struct FetchController {
         // Fetch Component
         var fetchComponent = URLComponents(
             url: baseURL, resolvingAgainstBaseURL: true)
-        fetchComponent?.queryItems = [URLQueryItem(name: "limit", value: "386")]
+        fetchComponent?.queryItems = [URLQueryItem(name: "limit", value: "50")]
 
         // Fetch URL
         guard let fetchURL = fetchComponent?.url else {
@@ -65,11 +65,11 @@ struct FetchController {
             let response = response as? HTTPURLResponse,
             response.statusCode == 200
         else {
-            throw NetworkError.badURL
+            throw NetworkError.badResponse
         }
 
         let pokemon = try JSONDecoder().decode(PokemonModel.self, from: data)
-        print("Fetched: \(pokemon)")
+        print("Fetched: \(pokemon.id): \(pokemon.name)")
         return pokemon
     }
 }

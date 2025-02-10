@@ -45,9 +45,9 @@ class PokemonViewModel: ObservableObject {
                 newPokemon.types = pokemon.types
                 newPokemon.hp = Int16(pokemon.hp)
                 newPokemon.attack = Int16(pokemon.attack)
-                newPokemon.defence = Int16(pokemon.defence)
+                newPokemon.defense = Int16(pokemon.defense)
                 newPokemon.specialAttack = Int16(pokemon.specialAttack)
-                newPokemon.specialDefence = Int16(pokemon.specialDefence)
+                newPokemon.specialDefense = Int16(pokemon.specialDefense)
                 newPokemon.speed = Int16(pokemon.speed)
                 newPokemon.sprite = pokemon.sprite
                 newPokemon.shiny = pokemon.shiny

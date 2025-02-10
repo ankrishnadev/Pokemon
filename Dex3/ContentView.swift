@@ -39,17 +39,17 @@ struct ContentView: View {
 
                         Text(pokemon.name!.capitalized)
                     }
-                    .navigationTitle("Pokédex")
-                    .navigationDestination(
-                        for: Pokemon.self,
-                        destination: { pokemon in
-                            PokemonDetailView().environmentObject(pokemon)
-                        }
-                    )
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            EditButton()
-                        }
+                }
+                .navigationTitle("Pokédex")
+                .navigationDestination(
+                    for: Pokemon.self,
+                    destination: { pokemon in
+                        PokemonDetailView().environmentObject(pokemon)
+                    }
+                )
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
                     }
                 }
             }

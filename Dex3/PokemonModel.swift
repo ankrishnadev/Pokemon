@@ -13,9 +13,9 @@ class PokemonModel: Codable {
     let types: [String]
     var hp: Int = 0
     var attack: Int = 0
-    var defence: Int = 0
+    var defense: Int = 0
     var specialAttack: Int = 0
-    var specialDefence: Int = 0
+    var specialDefense: Int = 0
     var speed: Int = 0
     let sprite: URL
     let shiny: URL
@@ -45,7 +45,7 @@ class PokemonModel: Codable {
         }
 
         enum SpritesKeys: String, CodingKey {
-            case frontDefaulst = "fron_default"
+            case frontDefaulst = "front_default"
             case frontShiny = "front_shiny"
         }
     }
@@ -60,7 +60,7 @@ class PokemonModel: Codable {
         var typesContainer = try containter.nestedUnkeyedContainer(
             forKey: .types)
 
-        while typesContainer.isAtEnd {
+        while !typesContainer.isAtEnd {
             let typeDictionaryContainer = try typesContainer.nestedContainer(
                 keyedBy: PokemonKeys.TypeDictionaryKeys.self)
             let typeContainer = try typeDictionaryContainer.nestedContainer(
@@ -74,15 +74,15 @@ class PokemonModel: Codable {
         types = decodedTypes
 
         var statContainer = try containter.nestedUnkeyedContainer(
-            forKey: PokemonKeys.stats.self)
-        while statContainer.isAtEnd {
+            forKey: .stats)
+        while !statContainer.isAtEnd {
             let statDictionaryContainer = try statContainer.nestedContainer(
                 keyedBy: PokemonKeys.StatsDictionaryKeys.self)
             let statContainer = try statDictionaryContainer.nestedContainer(
                 keyedBy: PokemonKeys.StatsDictionaryKeys.StatKeys.self,
                 forKey: .stat
             )
-
+        
             switch try statContainer.decode(String.self, forKey: .name) {
             case "hp":
                 hp = try statDictionaryContainer.decode(
@@ -90,14 +90,14 @@ class PokemonModel: Codable {
             case "attack":
                 attack = try statDictionaryContainer.decode(
                     Int.self, forKey: .value)
-            case "defence":
-                defence = try statDictionaryContainer.decode(
+            case "defense":
+                defense = try statDictionaryContainer.decode(
                     Int.self, forKey: .value)
             case "special-attack":
                 specialAttack = try statDictionaryContainer.decode(
                     Int.self, forKey: .value)
-            case "special-defence":
-                specialDefence = try statDictionaryContainer.decode(
+            case "special-defense":
+                    specialDefense = try statDictionaryContainer.decode(
                     Int.self, forKey: .value)
             case "speed":
                 speed = try statDictionaryContainer.decode(
