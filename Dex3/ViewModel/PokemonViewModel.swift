@@ -32,7 +32,12 @@ class PokemonViewModel: ObservableObject {
         state = .fetching
 
         do {
-            var pokedex = try await controller.fetchAllPokemons()
+            guard var pokedex = try await controller.fetchAllPokemons() else {
+                print("Pokemon data fetched, We good!")
+                state = .success
+                return
+            }
+            
             pokedex.sort { $0.id < $1.id }
 
             for pokemon in pokedex {
@@ -43,6 +48,7 @@ class PokemonViewModel: ObservableObject {
                 newPokemon.id = Int16(pokemon.id)
                 newPokemon.name = pokemon.name
                 newPokemon.types = pokemon.types
+                newPokemon.organizedTypes()
                 newPokemon.hp = Int16(pokemon.hp)
                 newPokemon.attack = Int16(pokemon.attack)
                 newPokemon.defense = Int16(pokemon.defense)

@@ -16,11 +16,13 @@ struct PokemonDetailView: View {
     var body: some View {
         ScrollView {
             ZStack {
-                Image("normalgrasselectricpoisonfairy")
+                Image(pokemon.background)
                     .resizable()
                     .scaledToFit()
 
-                AsyncImage(url: pokemon.sprite) { image in
+                AsyncImage(
+                    url: showShinny ? pokemon.shiny : pokemon.sprite
+                ) { image in
                     image.resizable()
                         .scaledToFit()
                         .padding(.top, 50)
@@ -60,6 +62,7 @@ struct PokemonDetailView: View {
                 } label: {
                     if showShinny {
                         Image(systemName: "wand.and.stars")
+                            .foregroundStyle(Color(pokemon.types![0].capitalized))
                     } else {
                         Image(systemName: "wand.and.sparkles.inverse")
                     }
