@@ -18,6 +18,17 @@ struct ContentView: View {
         animation: .default
     )
     private var pokedex: FetchedResults<Pokemon>
+    
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Pokemon.id, ascending: true)
+        ],
+        predicate: NSPredicate(format: "favorite == %d", true),
+        animation: .default
+    )
+    private var favorite: FetchedResults<Pokemon>
+    
+    @State private var filterByFavorite = false
 
     @StateObject var viewModel = PokemonViewModel(controller: FetchController())
 
@@ -25,7 +36,7 @@ struct ContentView: View {
         switch viewModel.state {
         case .success:
             NavigationStack {
-                List(pokedex) { pokemon in
+                List(filterByFavorite ? favorite : pokedex) { pokemon in
                     NavigationLink(value: pokemon) {
                         AsyncImage(url: pokemon.sprite) {
                             image in
@@ -38,6 +49,11 @@ struct ContentView: View {
                         .frame(width: 100, height: 100)
 
                         Text(pokemon.name!.capitalized)
+                        
+                        if pokemon.favorite {
+                            Image(systemName: "star.fill")
+                                .foregroundStyle(.yellow)
+                        }
                     }
                 }
                 .navigationTitle("Pokédex")
@@ -49,7 +65,16 @@ struct ContentView: View {
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
+                        Button {
+                            withAnimation {
+                                filterByFavorite.toggle()
+                            }
+                        } label: {
+                            Label(
+                                "Favorites",
+                                systemImage: filterByFavorite ? "star.fill" : "star"
+                            )
+                        }
                     }
                 }
             }
