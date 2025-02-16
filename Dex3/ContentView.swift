@@ -63,11 +63,11 @@ struct ContentView: View {
                             HStack {
                                 ForEach(pokemon.types!, id: \.self) { type in
                                     Text(type.capitalized)
-                                        .font(.title3)
+                                        .font(.subheadline)
                                         .padding([.leading, .trailing], 12)
                                         .background(Color(type.capitalized))
                                         .clipShape(Capsule())
-                                        .padding(.top, -5)
+                                        
                                 }
                             }
                         }
