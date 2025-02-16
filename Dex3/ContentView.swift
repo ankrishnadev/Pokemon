@@ -18,7 +18,7 @@ struct ContentView: View {
         animation: .default
     )
     private var pokedex: FetchedResults<Pokemon>
-    
+
     @FetchRequest(
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Pokemon.id, ascending: true)
@@ -27,7 +27,7 @@ struct ContentView: View {
         animation: .default
     )
     private var favorite: FetchedResults<Pokemon>
-    
+
     @State private var filterByFavorite = false
 
     @StateObject var viewModel = PokemonViewModel(controller: FetchController())
@@ -48,11 +48,28 @@ struct ContentView: View {
                         }
                         .frame(width: 100, height: 100)
 
-                        Text(pokemon.name!.capitalized)
-                        
-                        if pokemon.favorite {
-                            Image(systemName: "star.fill")
-                                .foregroundStyle(.yellow)
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(pokemon.name!.capitalized)
+                                    .font(.title2)
+                                    .bold()
+
+                                if pokemon.favorite {
+                                    Image(systemName: "star.fill")
+                                        .foregroundStyle(.yellow)
+                                }
+                            }
+
+                            HStack {
+                                ForEach(pokemon.types!, id: \.self) { type in
+                                    Text(type.capitalized)
+                                        .font(.title3)
+                                        .padding([.leading, .trailing], 12)
+                                        .background(Color(type.capitalized))
+                                        .clipShape(Capsule())
+                                        .padding(.top, -5)
+                                }
+                            }
                         }
                     }
                 }
@@ -72,7 +89,8 @@ struct ContentView: View {
                         } label: {
                             Label(
                                 "Favorites",
-                                systemImage: filterByFavorite ? "star.fill" : "star"
+                                systemImage: filterByFavorite
+                                    ? "star.fill" : "star"
                             )
                         }
                     }
