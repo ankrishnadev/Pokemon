@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 class PokemonViewModel: ObservableObject {
@@ -17,9 +18,12 @@ class PokemonViewModel: ObservableObject {
     }
 
     @Published var state: State = .notStarted
+    
+    @FetchRequest<Pokemon>(sortDescriptors: []) private var all
 
     private let controller: FetchController
-
+    private let allPokemons: [Pokemon] = []
+    
     init(controller: FetchController) {
         self.controller = controller
         
@@ -55,8 +59,8 @@ class PokemonViewModel: ObservableObject {
                 newPokemon.specialAttack = Int16(pokemon.specialAttack)
                 newPokemon.specialDefense = Int16(pokemon.specialDefense)
                 newPokemon.speed = Int16(pokemon.speed)
-                newPokemon.sprite = pokemon.sprite
-                newPokemon.shiny = pokemon.shiny
+                newPokemon.spriteURL = pokemon.sprite
+                newPokemon.shinyURL = pokemon.shiny
                 newPokemon.favorite = false
                 
                 try PersistenceController.shared.container.viewContext.save()
@@ -66,6 +70,26 @@ class PokemonViewModel: ObservableObject {
             state = .success
         } catch {
             state = .failed(error: error)
+        }
+        
+        storeSprite()
+    }
+    
+    private func storeSprite() {
+        Task {
+            do {
+                for pokemon in all {
+                    pokemon.sprite = try await URLSession.shared
+                        .data(from: pokemon.spriteURL!).0
+                    pokemon.shiny = try await URLSession.shared
+                        .data(from: pokemon.shinyURL!).0
+                }
+                
+                try PersistenceController.shared.container.viewContext.save()
+                
+            } catch {
+                print(error)
+            }
         }
     }
 }

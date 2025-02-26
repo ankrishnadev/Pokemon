@@ -21,7 +21,7 @@ struct PokemonDetailView: View {
                     .scaledToFit()
 
                 AsyncImage(
-                    url: showShinny ? pokemon.shiny : pokemon.sprite
+                    url: showShinny ? pokemon.shinyURL : pokemon.spriteURL
                 ) { image in
                     image.resizable()
                         .scaledToFit()

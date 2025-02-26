@@ -27,18 +27,20 @@ struct ContentView: View {
         animation: .default
     )
     private var favorite: FetchedResults<Pokemon>
+    
+    @FetchRequest<Pokemon>(sortDescriptors: []) private var all
 
     @State private var filterByFavorite = false
 
     @StateObject var viewModel = PokemonViewModel(controller: FetchController())
 
     var body: some View {
-        switch viewModel.state {
-        case .success:
+//        switch viewModel.state {
+//        case .success:
             NavigationStack {
                 List(filterByFavorite ? favorite : pokedex) { pokemon in
                     NavigationLink(value: pokemon) {
-                        AsyncImage(url: pokemon.sprite) {
+                        AsyncImage(url: pokemon.spriteURL) {
                             image in
                             image
                                 .resizable()
@@ -96,9 +98,9 @@ struct ContentView: View {
                     }
                 }
             }
-        default:
-            ProgressView()
-        }
+//        default:
+//            ProgressView()
+//        }
     }
 }
 
