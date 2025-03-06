@@ -40,15 +40,20 @@ struct ContentView: View {
             NavigationStack {
                 List(filterByFavorite ? favorite : pokedex) { pokemon in
                     NavigationLink(value: pokemon) {
-                        AsyncImage(url: pokemon.spriteURL) {
-                            image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        } placeholder: {
-                            ProgressView()
+                        if pokemon.sprite == nil {
+                            AsyncImage(url: pokemon.spriteURL) {
+                                image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 100, height: 100)
+                        } else {
+                            pokemon.spriteImage.resizable().scaledToFit()
+                                .frame(width: 100, height: 100)
                         }
-                        .frame(width: 100, height: 100)
 
                         VStack(alignment: .leading) {
                             HStack {

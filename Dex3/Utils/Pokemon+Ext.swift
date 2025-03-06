@@ -6,8 +6,29 @@
 //
 
 import Foundation
+import SwiftUICore
+import UIKit
 
 extension Pokemon {
+    
+    var spriteImage: Image {
+        if let data = sprite, let image = UIImage(data: data) {
+            Image(uiImage: image)
+        } else {
+            Image(.bulbasaur)
+        }
+            
+    }
+    
+    var shinnyImage: Image {
+        if let data = shiny, let image = UIImage(data: data) {
+            Image(uiImage: image)
+        } else {
+            Image(.bulbasaur)
+        }
+    }
+    
+    
     var background: String {
         switch self.types![0] {
         case "normal", "grass", "electric", "poison", "fairy":
